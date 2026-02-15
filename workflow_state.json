@@ -1,0 +1,35 @@
+{
+  "agents": {
+    "Content Writer Agent": {
+      "agent_id": "699207063361b44adf2951f0",
+      "provider_id": "OpenAI",
+      "model": "gpt-4.1",
+      "agent_type": "json",
+      "has_image_output": false,
+      "has_voice": false,
+      "has_file_output": false
+    },
+    "SEO Analysis Agent": {
+      "agent_id": "6992070761e2cce880e01709",
+      "provider_id": "Perplexity",
+      "model": "sonar-reasoning-pro",
+      "agent_type": "json",
+      "has_image_output": false,
+      "has_voice": false,
+      "has_file_output": false
+    },
+    "Graphic Generation Agent": {
+      "agent_id": "6992070772b5bcf5c3207f93",
+      "provider_id": "Google",
+      "model": "gemini-2.5-flash",
+      "agent_type": "json",
+      "has_image_output": true,
+      "has_voice": false,
+      "has_file_output": false
+    }
+  },
+  "workflow_id": null,
+  "rag_ids": {},
+  "schedule_ids": {},
+  "schedules": {}
+}

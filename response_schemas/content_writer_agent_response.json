@@ -1,0 +1,16 @@
+{
+  "agent_name": "Content Writer Agent",
+  "agent_id": "699207063361b44adf2951f0",
+  "agent_type": "json",
+  "accessor": "json",
+  "has_module_outputs": false,
+  "response_schema": {
+    "title": "string",
+    "content": "string",
+    "content_type": "string",
+    "tone": "string",
+    "word_count": "number",
+    "estimated_read_time": "string",
+    "keywords_used": ["string"]
+  }
+}

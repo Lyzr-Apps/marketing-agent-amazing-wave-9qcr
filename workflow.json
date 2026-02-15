@@ -1,0 +1,88 @@
+{
+  "workflow": {
+    "nodes": [
+      {
+        "id": "input_node",
+        "type": "Input",
+        "label": "User Input",
+        "nodeCategory": "input"
+      },
+      {
+        "id": "content_writer_agent",
+        "type": "Agent",
+        "label": "Content Writer Agent",
+        "nodeCategory": "agent",
+        "agent_id": "699207063361b44adf2951f0"
+      },
+      {
+        "id": "seo_analysis_agent",
+        "type": "Agent",
+        "label": "SEO Analysis Agent",
+        "nodeCategory": "agent",
+        "agent_id": "6992070761e2cce880e01709"
+      },
+      {
+        "id": "graphic_generation_agent",
+        "type": "Agent",
+        "label": "Graphic Generation Agent",
+        "nodeCategory": "agent",
+        "agent_id": "6992070772b5bcf5c3207f93"
+      }
+    ],
+    "edges": [
+      {
+        "source": "input_node",
+        "target": "content_writer_agent"
+      },
+      {
+        "source": "input_node",
+        "target": "seo_analysis_agent"
+      },
+      {
+        "source": "input_node",
+        "target": "graphic_generation_agent"
+      }
+    ]
+  },
+  "agents": [
+    {
+      "agent_id": "699207063361b44adf2951f0",
+      "name": "Content Writer Agent",
+      "description": "Generates blog posts, ad copy, social media captions, email newsletters, and other marketing content based on user-provided topic, tone, target audience, and format specifications",
+      "provider_id": "OpenAI",
+      "model": "gpt-4.1",
+      "temperature": 0.75,
+      "top_p": 0.95,
+      "image_output_config": null,
+      "voice_config": null,
+      "file_output": false
+    },
+    {
+      "agent_id": "6992070761e2cce880e01709",
+      "name": "SEO Analysis Agent",
+      "description": "Analyzes content for SEO optimization including keyword density, readability, meta description suggestions, heading structure, internal linking opportunities, and competitive keyword research using real-time web data",
+      "provider_id": "Perplexity",
+      "model": "sonar-reasoning-pro",
+      "temperature": 0.3,
+      "top_p": 1,
+      "image_output_config": null,
+      "voice_config": null,
+      "file_output": false
+    },
+    {
+      "agent_id": "6992070772b5bcf5c3207f93",
+      "name": "Graphic Generation Agent",
+      "description": "Creates marketing visuals including social media graphics, blog hero images, ad banners, and promotional artwork based on user text descriptions and style preferences",
+      "provider_id": "Google",
+      "model": "gemini-2.5-flash",
+      "temperature": 0.6,
+      "top_p": 0.9,
+      "image_output_config": {
+        "model": "gemini/gemini-3-pro-image-preview",
+        "credential_id": "lyzr_google"
+      },
+      "voice_config": null,
+      "file_output": false
+    }
+  ]
+}
