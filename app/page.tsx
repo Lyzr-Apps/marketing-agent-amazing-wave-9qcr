@@ -1134,8 +1134,49 @@ function GraphicsStudioScreen({
         const data: GraphicResponse = parsed ?? {}
         setGraphicMeta(data)
 
-        const files = Array.isArray(res.module_outputs?.artifact_files) ? res.module_outputs!.artifact_files : []
-        const url = files[0]?.file_url ?? ''
+        // Extract image URL from multiple possible locations in the response
+        let url = ''
+
+        // 1. Check module_outputs.artifact_files (standard path)
+        const files = Array.isArray(res.module_outputs?.artifact_files)
+          ? res.module_outputs!.artifact_files
+          : []
+        url = files[0]?.file_url ?? files[0]?.url ?? ''
+
+        // 2. Check module_outputs for direct url fields
+        if (!url && res.module_outputs) {
+          const mo = res.module_outputs as Record<string, any>
+          url = mo.file_url ?? mo.url ?? mo.image_url ?? ''
+          // Check if artifact_files uses a different shape
+          if (!url && mo.artifact_files && typeof mo.artifact_files === 'object' && !Array.isArray(mo.artifact_files)) {
+            url = mo.artifact_files.file_url ?? mo.artifact_files.url ?? ''
+          }
+        }
+
+        // 3. Check the parsed result for image URLs
+        if (!url && data) {
+          const d = data as Record<string, any>
+          url = d.image_url ?? d.file_url ?? d.url ?? d.image ?? ''
+        }
+
+        // 4. Check raw_response for module_outputs that may have been missed
+        if (!url && res.raw_response) {
+          try {
+            const raw = typeof res.raw_response === 'string' ? JSON.parse(res.raw_response) : res.raw_response
+            const rawMo = raw?.module_outputs ?? raw?.response?.module_outputs ?? raw?.data?.module_outputs
+            if (rawMo) {
+              const rawFiles = Array.isArray(rawMo.artifact_files) ? rawMo.artifact_files : []
+              url = rawFiles[0]?.file_url ?? rawFiles[0]?.url ?? rawMo.file_url ?? rawMo.url ?? rawMo.image_url ?? ''
+            }
+            // Also check for image_url at top level of raw response
+            if (!url) {
+              url = raw?.image_url ?? raw?.file_url ?? raw?.response?.image_url ?? ''
+            }
+          } catch {
+            // raw_response is not parseable, skip
+          }
+        }
+
         if (url) {
           setImageUrl(url)
           setHistory((prev) => [
@@ -1144,7 +1185,7 @@ function GraphicsStudioScreen({
           ])
           addRecentOutput({ type: 'graphic', title: description.slice(0, 50) })
         } else {
-          setError('Image was generated but no file URL was returned.')
+          setError('Image was generated but no file URL was returned. Please try again.')
         }
       } else {
         setError(res.error ?? 'Failed to generate graphic. Please try again.')

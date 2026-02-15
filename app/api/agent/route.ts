@@ -7,8 +7,10 @@ const LYZR_API_KEY = process.env.LYZR_API_KEY || ''
 // Types
 interface ArtifactFile {
   file_url: string
+  url?: string
   name: string
   format_type: string
+  [key: string]: any
 }
 
 interface ModuleOutputs {
@@ -182,9 +184,20 @@ export async function POST(request: NextRequest) {
 
       try {
         const envelope = JSON.parse(rawText)
-        if (envelope && typeof envelope === 'object' && 'response' in envelope) {
-          moduleOutputs = envelope.module_outputs
-          agentResponseRaw = envelope.response
+        if (envelope && typeof envelope === 'object') {
+          // Extract module_outputs from any level where it exists
+          if (envelope.module_outputs) {
+            moduleOutputs = envelope.module_outputs
+          } else if (envelope.response?.module_outputs) {
+            moduleOutputs = envelope.response.module_outputs
+          } else if (envelope.data?.module_outputs) {
+            moduleOutputs = envelope.data.module_outputs
+          }
+
+          // Extract the inner agent response for normalization
+          if ('response' in envelope) {
+            agentResponseRaw = envelope.response
+          }
         }
       } catch {
         // Not standard JSON envelope, fall through — parseLLMJson will handle it

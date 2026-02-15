@@ -33,8 +33,10 @@ export interface NormalizedAgentResponse {
 
 export interface ArtifactFile {
   file_url: string
+  url?: string
   name: string
   format_type: string
+  [key: string]: any
 }
 
 export interface ModuleOutputs {
